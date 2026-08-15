@@ -1,16 +1,14 @@
-FROM ghcr.io/falgunisheladiya/nightly-actions/rl-base:latest
+FROM ghcr.io/falgunisheladiya/nightly-actions/rl-base:nightly
 
 WORKDIR /app
 
 COPY src/ src/
 COPY pyproject.toml .
-COPY out/policy.zip out/policy.zip
-COPY out/metrics.json out/metrics.json
+
+# Copy artifacts from Stage 3
+COPY out/policy.zip ./policy.zip
+COPY out/metrics.json ./metrics.json
 
 ENV PYTHONPATH=/app
 
-LABEL org.opencontainers.image.source="https://github.com/<owner>/<repo>"
-LABEL org.opencontainers.image.revision="${GIT_SHA}"
-LABEL org.opencontainers.image.created="${CREATED_AT}"
-
-ENTRYPOINT ["python", "-m", "src.evaluate"]
+ENTRYPOINT ["python", "-m", "src.evaluate", "--policy", "policy.zip"]
