@@ -71,6 +71,8 @@ jobs:
     needs: train-and-gate
     if: needs.train-and-gate.result == 'success'
     runs-on: ubuntu-latest
+    outputs:
+      digest: ${{ steps.build.outputs.digest }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -102,8 +104,6 @@ jobs:
           labels: |
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}
-            org.opencontainers.image.created=${{ steps.created.outputs.now }}
-            custom.mean_reward=${{ steps.metrics.outputs.mean_reward }}
             custom.seed=42
 
       - name: Build and push frozen image
@@ -138,14 +138,15 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Pull frozen image by digest
-        run: docker pull ${{ env.IMAGE_FROZEN }}@${{ needs.freeze-and-push.outputs.digest }}
+        run: docker pull ghcr.io/FalguniSheladiya/Nightly-actions/rl-frozen@${{ needs.freeze-and-push.outputs.digest }}
+
 
       - name: Run pinned experiment
         run: |
           mkdir -p out_exp
           docker run --rm \
             -v $PWD/out_exp:/app/out \
-            ${{ env.IMAGE_FROZEN }}@${{ needs.freeze-and-push.outputs.digest }} \
+            ghcr.io/FalguniSheladiya/Nightly-actions/rl-frozen@${{ needs.freeze-and-push.outputs.digest }} \
             --policy out/policy.zip --episodes 10 --seed 999 --out out_exp
 
       - name: Compare baseline vs experiment
