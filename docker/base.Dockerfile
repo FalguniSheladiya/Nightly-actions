@@ -11,13 +11,17 @@ RUN apt-get update && apt-get install -y \
     libxext6 \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
-RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir \
-       gymnasium==0.29.1 \
-       stable-baselines3==2.3.0 \
-       torch --index-url https://download.pytorch.org/whl/cpu \
-       pytest
+# Upgrade pip
+RUN pip install --no-cache-dir --upgrade pip
+
+# Install torch separately (CPU wheel)
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
+
+# Install gymnasium + stable-baselines3 + pytest from PyPI
+RUN pip install --no-cache-dir \
+    gymnasium>=0.29 \
+    stable-baselines3>=2.3 \
+    pytest
 
 COPY pyproject.toml .
 COPY src/ src/
