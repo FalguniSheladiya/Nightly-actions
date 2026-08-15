@@ -47,7 +47,7 @@ jobs:
     needs: prebuild-base
     runs-on: ubuntu-latest
     container:
-      image: ${{ env.IMAGE_BASE }}:nightly
+      image: ghcr.io/FalguniSheladiya/Nightly-actions/rl-base:nightly
     steps:
       - name: Checkout
         uses: actions/checkout@v4
