@@ -150,7 +150,7 @@ jobs:
 
       - name: Compare baseline vs experiment
         run: |
-          BASE=$(jq '.mean_reward' out/metrics.json)
+          BASE=$(jq '.mean_reward' metrics.json)
           EXP=$(jq '.mean_reward' out_exp/metrics.json)
           echo "## Comparison" >> $GITHUB_STEP_SUMMARY
           echo "| run | mean_reward |" >> $GITHUB_STEP_SUMMARY
