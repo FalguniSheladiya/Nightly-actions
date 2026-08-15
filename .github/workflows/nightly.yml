@@ -11,8 +11,8 @@ permissions:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_BASE: ghcr.io/${{ github.repository }}/rl-base
-  IMAGE_FROZEN: ghcr.io/${{ github.repository }}/rl-frozen
+  IMAGE_BASE: ghcr.io/falgunisheladiya/nightly-actions/rl-base
+  IMAGE_FROZEN: ghcr.io/falgunisheladiya/nightly-actions/rl-frozen
 
 jobs:
   prebuild-base:
@@ -139,7 +139,6 @@ jobs:
 
       - name: Pull frozen image by digest
         run: docker pull ghcr.io/falgunisheladiya/nightly-actions/rl-frozen@${{ needs.freeze-and-push.outputs.digest }}
-
 
       - name: Run pinned experiment
         run: |
