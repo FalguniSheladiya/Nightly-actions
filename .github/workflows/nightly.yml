@@ -147,10 +147,16 @@ jobs:
             -v $PWD/out_exp:/app/out \
             ghcr.io/falgunisheladiya/nightly-actions/rl-frozen@${{ needs.freeze-and-push.outputs.digest }} \
             --policy policy.zip --episodes 10 --seed 999 --out out_exp
-
+      
+      - name: Extract baseline metrics from frozen image
+        run: |
+          CID=$(docker create ghcr.io/falgunisheladiya/nightly-actions/rl-frozen@${{ needs.freeze-and-push.outputs.digest }})
+          docker cp $CID:/app/metrics.json baseline_metrics.json
+          docker rm $CID
+      
       - name: Compare baseline vs experiment
         run: |
-          BASE=$(jq '.mean_reward' metrics.json)
+          BASE=$(jq '.mean_reward' baseline_metrics.json)
           EXP=$(jq '.mean_reward' out_exp/metrics.json)
           echo "## Comparison" >> $GITHUB_STEP_SUMMARY
           echo "| run | mean_reward |" >> $GITHUB_STEP_SUMMARY
