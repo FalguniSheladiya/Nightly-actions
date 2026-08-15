@@ -40,9 +40,9 @@ jobs:
           tags: |
             ${{ env.IMAGE_BASE }}:nightly
             ${{ env.IMAGE_BASE }}:latest
-          cache-from: type=registry,ref=${{ env.IMAGE_BASE }}:nightly
-          cache-to: type=registry,ref=${{ env.IMAGE_BASE }}:nightly,mode=max
-
+          cache-from: type=registry,ref=${{ env.IMAGE_BASE }}:cache
+          cache-to: type=registry,ref=${{ env.IMAGE_BASE }}:cache,mode=max
+    
   train-and-gate:
     needs: prebuild-base
     runs-on: ubuntu-latest
