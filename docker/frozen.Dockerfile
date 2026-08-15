@@ -1,4 +1,4 @@
-FROM ghcr.io/<owner>/<repo>/rl-base:latest
+FROM ghcr.io/falgunisheladiya/nightly-actions/rl-base:latest
 
 WORKDIR /app
 
