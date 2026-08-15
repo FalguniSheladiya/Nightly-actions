@@ -47,7 +47,7 @@ jobs:
     needs: prebuild-base
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/FalguniSheladiya/Nightly-actions/rl-base:nightly
+      image: ghcr.io/falgunisheladiya/nightly-actions/rl-base:nightly
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -138,7 +138,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Pull frozen image by digest
-        run: docker pull ghcr.io/FalguniSheladiya/Nightly-actions/rl-frozen@${{ needs.freeze-and-push.outputs.digest }}
+        run: docker pull ghcr.io/falgunisheladiya/nightly-actions/rl-frozen@${{ needs.freeze-and-push.outputs.digest }}
 
 
       - name: Run pinned experiment
@@ -146,7 +146,7 @@ jobs:
           mkdir -p out_exp
           docker run --rm \
             -v $PWD/out_exp:/app/out \
-            ghcr.io/FalguniSheladiya/Nightly-actions/rl-frozen@${{ needs.freeze-and-push.outputs.digest }} \
+            ghcr.io/falgunisheladiya/nightly-actions/rl-frozen@${{ needs.freeze-and-push.outputs.digest }} \
             --policy out/policy.zip --episodes 10 --seed 999 --out out_exp
 
       - name: Compare baseline vs experiment
